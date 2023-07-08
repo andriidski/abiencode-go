@@ -1,0 +1,11 @@
+package utils
+
+import "math/big"
+
+var (
+	TwoToPow256   = new(big.Int).Lsh(big.NewInt(1), 256)         // 2 ** 256
+	TwoToPow256m1 = new(big.Int).Sub(TwoToPow256, big.NewInt(1)) // 2 ** 256 - 1
+
+	TwoToPow128   = new(big.Int).Lsh(big.NewInt(1), 128)         // 2 ** 128
+	TwoToPow128m1 = new(big.Int).Sub(TwoToPow128, big.NewInt(1)) // 2 ** 128 - 1
+)
