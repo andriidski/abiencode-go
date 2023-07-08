@@ -33,7 +33,32 @@ func TestInt256ToBe(t *testing.T) {
 	}
 }
 
-// TODO: int128 needs fixing
+func TestInt256ToBeOverflow(t *testing.T) {
+	defer func() {
+		err := recover().(error)
+
+		if err.Error() != ErrInt256Overflow.Error() {
+			t.Fatalf("wrong panic message: %s", err.Error())
+		}
+	}()
+
+	Int256ToBe(BigIntFromString("57896044618658097711785492504343953926634992332820282019728792003956564819968"))
+	t.Errorf("expected panic, got %v", nil)
+}
+
+func TestInt256ToBeUnderflow(t *testing.T) {
+	defer func() {
+		err := recover().(error)
+
+		if err.Error() != ErrInt256Underflow.Error() {
+			t.Fatalf("wrong panic message: %s", err.Error())
+		}
+	}()
+
+	Int256ToBe(BigIntFromString("-57896044618658097711785492504343953926634992332820282019728792003956564819969"))
+	t.Errorf("expected panic, got %v", nil)
+}
+
 func TestInt128ToBe(t *testing.T) {
 	// Test max int128.
 	b := Int128ToBe(BigIntFromString("170141183460469231731687303715884105727"))
@@ -65,6 +90,32 @@ func TestInt128ToBe(t *testing.T) {
 	if ToHex(b) != expected {
 		t.Errorf("expected %s, got %s", expected, ToHex(b))
 	}
+}
+
+func TestInt128ToBeOverflow(t *testing.T) {
+	defer func() {
+		err := recover().(error)
+
+		if err.Error() != ErrInt128Overflow.Error() {
+			t.Fatalf("wrong panic message: %s", err.Error())
+		}
+	}()
+
+	Int128ToBe(BigIntFromString("170141183460469231731687303715884105728"))
+	t.Errorf("expected panic, got %v", nil)
+}
+
+func TestInt128ToBeUnderflow(t *testing.T) {
+	defer func() {
+		err := recover().(error)
+
+		if err.Error() != ErrInt128Underflow.Error() {
+			t.Fatalf("wrong panic message: %s", err.Error())
+		}
+	}()
+
+	Int128ToBe(BigIntFromString("-170141183460469231731687303715884105729"))
+	t.Errorf("expected panic, got %v", nil)
 }
 
 func TestInt64ToBe(t *testing.T) {

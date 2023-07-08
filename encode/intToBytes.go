@@ -52,21 +52,37 @@ func Int64ToBe(v int64) []byte {
 }
 
 func Int128ToBe(v *big.Int) []byte {
-	b := new(big.Int)
+	b := new(big.Int).Set(v)
 	b = b.Set(v)
 
-	if b.Sign() < 0 || b.BitLen() > 255 {
+	// Check range.
+	if b.Cmp(utils.TwoToPow127m1) > 0 {
+		panic(utils.ErrInt128Overflow)
+	}
+	if b.Cmp(new(big.Int).Neg(utils.TwoToPow127)) < 0 {
+		panic(utils.ErrInt128Underflow)
+	}
+
+	if b.Sign() < 0 {
 		b.And(b, utils.TwoToPow128m1)
 	}
-	return common.LeftPadBytes(v.Bytes(), 16)
+
+	return common.LeftPadBytes(b.Bytes(), 16)
 }
 
-// TODO: review
 func Int256ToBe(v *big.Int) []byte {
 	b := new(big.Int)
 	b = b.Set(v)
 
-	if b.Sign() < 0 || b.BitLen() > 255 {
+	// Check range.
+	if b.Cmp(utils.TwoToPow255m1) > 0 {
+		panic(utils.ErrInt256Overflow)
+	}
+	if b.Cmp(new(big.Int).Neg(utils.TwoToPow255)) < 0 {
+		panic(utils.ErrInt256Underflow)
+	}
+
+	if b.Sign() < 0 {
 		b.And(b, utils.TwoToPow256m1)
 	}
 
