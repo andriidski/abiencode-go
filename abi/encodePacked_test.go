@@ -10,6 +10,7 @@ func TestEncodePacked(t *testing.T) {
 	typesList := [][]string{
 		{
 			"int16",
+			"bytes1",
 			"uint16",
 			"string",
 		},
@@ -18,13 +19,14 @@ func TestEncodePacked(t *testing.T) {
 	values := [][]interface{}{
 		{
 			int16(-1),
+			[1]byte{0x42},
 			uint16(0x03),
 			"Hello, world!",
 		},
 	}
 
 	expectedEncodings := []string{
-		"0xffff000348656c6c6f2c20776f726c6421",
+		"0xffff42000348656c6c6f2c20776f726c6421",
 	}
 
 	for i, types := range typesList {
